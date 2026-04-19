@@ -3,6 +3,7 @@ package com.perfumeria.proyecto.service;
 import com.perfumeria.proyecto.dto.AuthResponse;
 import com.perfumeria.proyecto.dto.LoginRequest;
 import com.perfumeria.proyecto.dto.RegistroRequest;
+import com.perfumeria.proyecto.exception.CredencialesInvalidasException;
 import com.perfumeria.proyecto.exception.EmailDuplicadoException;
 import com.perfumeria.proyecto.model.Usuario;
 import com.perfumeria.proyecto.repository.UsuarioRepository;
@@ -39,10 +40,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new CredencialesInvalidasException("El email no esta registrado"));
 
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
-            throw new RuntimeException("Contraseña incorecta");
+            throw new CredencialesInvalidasException("Contraseña incorecta");
         }
 
         String token = jwtUtil.generateToken(usuario.getEmail(), usuario.getRol().name());

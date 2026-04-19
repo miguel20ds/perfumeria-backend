@@ -1,5 +1,6 @@
 package com.perfumeria.proyecto.controller;
 
+import com.perfumeria.proyecto.exception.CredencialesInvalidasException;
 import com.perfumeria.proyecto.exception.EmailDuplicadoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,4 +37,10 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
+
+   @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<Map<String, String>> handleCredencialesInvalidas(CredencialesInvalidasException ex){
+      Map<String, String> error = new HashMap<>();
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+   }
 }
