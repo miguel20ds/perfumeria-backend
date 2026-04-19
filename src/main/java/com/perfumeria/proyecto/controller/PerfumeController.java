@@ -1,13 +1,18 @@
 package com.perfumeria.proyecto.controller;
 
 import com.perfumeria.proyecto.model.Perfume;
+import com.perfumeria.proyecto.service.FileStorageService;
 import com.perfumeria.proyecto.service.PerfumeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/perfumes")
@@ -16,6 +21,7 @@ import java.util.List;
 public class PerfumeController {
 
     private final PerfumeService perfumeService;
+    private final FileStorageService fileStorageService;
 
     @GetMapping
     public ResponseEntity<List<Perfume>> listar() {
@@ -49,6 +55,20 @@ public class PerfumeController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         perfumeService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/upload")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, String>> uploadImagen(
+            @RequestParam("file")MultipartFile file) {
+        try {
+            String nombreArchivo = fileStorageService.guardarImagen(file);
+            String url = "/uploads/" + nombreArchivo;
+            return  ResponseEntity.ok(Map.of("url", url));
+        }catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al subir la imagen"));
+        }
     }
 
 
