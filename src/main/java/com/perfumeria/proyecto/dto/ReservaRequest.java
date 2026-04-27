@@ -9,7 +9,7 @@ import lombok.Data;
 
 public class ReservaRequest {
 
-    @NotNull(message = "El perfume es obligatorio")
+    @NotNull(message = "{validation.perfume.obligatorio}")
     @Schema(description = "ID del perfume a reserva", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long perfumeId;
 }

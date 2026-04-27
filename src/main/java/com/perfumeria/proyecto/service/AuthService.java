@@ -20,10 +20,11 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final MessageService messageService;
 
     public AuthResponse registro(RegistroRequest request) {
         if (usuarioRepository.existsByEmail(request.getEmail())){
-            throw new EmailDuplicadoException("El email ya esta registrado");
+            throw new EmailDuplicadoException(messageService.get("auth.email.duplicado"));
         }
 
         Usuario usuario = new Usuario();
@@ -40,10 +41,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new CredencialesInvalidasException("El email no esta registrado"));
+                .orElseThrow(() -> new CredencialesInvalidasException(messageService.get("auth.usuario.no.encontrado")));
 
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
-            throw new CredencialesInvalidasException("Contraseña incorecta");
+            throw new CredencialesInvalidasException(messageService.get("auth.password.incorrecta"));
         }
 
         String token = jwtUtil.generateToken(usuario.getEmail(), usuario.getRol().name());

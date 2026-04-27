@@ -11,17 +11,17 @@ import lombok.Data;
 
 public class RegistroRequest {
 
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "{validacion.nombre.obligatorio}")
     @Schema(description = "Nombre completo del usuario", example = "Juan Pérez", requiredMode = Schema.RequiredMode.REQUIRED)
     private String nombre;
 
-    @Email(message = "Email inválido")
-    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "{validacion.email.invalido}")
+    @NotBlank(message = "{validacion.email.obligatorio}")
     @Schema(description = "Correo electrónico del usuario", example = "juan@email.com", requiredMode = Schema.RequiredMode.REQUIRED)
     private String email;
 
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "{validacion.email.obligatorio}")
+    @NotBlank(message = "{validation.password.obligatorio}")
     @Schema(description = "Contraseña del usuario, mínimo 6 caracteres", example = "123456", requiredMode = Schema.RequiredMode.REQUIRED)
     private String password;
 }

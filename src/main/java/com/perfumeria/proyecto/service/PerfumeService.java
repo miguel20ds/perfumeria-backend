@@ -13,6 +13,7 @@ import java.util.List;
 public class PerfumeService {
 
     private final PerfumeRepository perfumeRepository;
+    private final MessageService messageService;
 
     public List<Perfume> listarTodos() {
         return perfumeRepository.findAll();
@@ -20,7 +21,7 @@ public class PerfumeService {
 
     public Perfume buscarPorId(Long id) {
         return perfumeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Perfume no encontrado"));
+                .orElseThrow(() -> new RuntimeException(messageService.get("perfume.no.encontrado")));
     }
 
     public List<Perfume> buscarPorNombre(String nombre) {
