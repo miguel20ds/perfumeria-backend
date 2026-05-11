@@ -7,6 +7,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
+import java.util.List;
 import java.util.Locale;
 
 @Configuration
@@ -25,6 +26,11 @@ public class I18nConfig {
     @Bean
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
+        resolver.setSupportedLocales(List.of(
+                new Locale("es"),
+                new Locale("en"),
+                new Locale("fr")
+        ));
         resolver.setDefaultLocale(new Locale("es"));
         return resolver;
     }
